@@ -214,16 +214,10 @@ def trade():
             seller_shares = rowData['seller_shares'] # shares to give
             buyer_stock = rowData['buyer_stock'] # stock to get
             buyer_shares = rowData['buyer_shares'] # shares to get
-            print(seller_stock , current_shares(seller_stock))
             if not current_shares(seller_stock):
-                print('pass through if current')
                 return apology('cannot sell more shares than you have')
-            print('test')
             available_shares = current_shares(seller_stock)
-            print(available_shares)
-            print(seller_shares)
             if int(seller_shares) > available_shares:
-                print('passed through if')
                 return apology('cannot sell more shares than you have')
             current_time = datetime.now()
             trade_date = current_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -235,7 +229,6 @@ def trade():
             db.execute('INSERT INTO Buy (shares, symbol, purchase_price, purchase_date, person_id) VALUES (?, ?, ?, ?,?)',seller_shares,seller_stock,int(0), trade_date, seller_id)
             db.execute('INSERT INTO sell (shares, symbol, purchase_price, purchase_date, person_id) VALUES (?, ?, ?, ?,?)',buyer_shares,buyer_stock,int(0), trade_date, seller_id)
             db.execute('DELETE FROM trading WHERE seller_id = ? AND seller_stock = ? AND seller_shares = ? AND buyer_stock = ? AND buyer_shares = ?;',seller_id,buyer_stock,buyer_shares,seller_stock, seller_shares)
-            print('executed')
             return redirect(url_for('trade'))
         else:
                 seller_stock = request.form.get("stock") #stock t0 give
