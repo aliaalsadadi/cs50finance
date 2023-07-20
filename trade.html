@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    trade
+{% endblock %}
+
+{% block main %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div style="max-width: 1400px;"> 
+    <form action="/trade" method="post" style="max-width: 100%;">
+        <div class="d-flex align-items-center">
+        <label for="stock">Choose a stock to trade with</label>
+        <select name="stock" class="mr-2 flex-grow-1">
+            {% for symbol in symbols %}
+            <option value="{{symbol.symbol}}">{{symbol.symbol}}</option>
+            {% endfor %}
+        </select>
+        <input class="form-control mx-2" id="seller_shares" name="seller_shares" placeholder="number of shares to sell" type="text">
+        <input autocomplete="off" autofocus class="form-control mx-2" id="buyer_symbol" name="buyer_symbol" placeholder="stock's sybmbol to get" type="text">
+        <input class="form-control mx-2" id="buyer_shares" name="buyer_shares" placeholder="number of shares to get" type="text">
+        <button class="btn btn-primary" id="submit-button" type="submit">Trade</button>
+    </div>
+    </form>
+</div>
+<table id="my-table" class="table table-hoverable">
+    <thead>
+      <tr>
+        <th>seller id</th>
+        <th>stock to give</th>
+        <th>shares to give</th>
+        <th>stock to get</th>
+        <th>shares to get</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for trade in trades%}
+        <tr>
+            <td>{{trade.seller_id}}</td>
+            <td>{{trade.buyer_stock}}</td>
+            <td>{{trade.buyer_shares}}</td>
+            <td>{{trade.seller_stock}}</td>
+            <td>{{trade.seller_shares}}</td>
+            <td><button class="row-button" data-row="2">Trade</button>
+        </tr>
+        {% endfor %}
+      <!-- more rows here -->
+    </tbody>
+  </table>
+
+  <script>
+    $(document).ready(function() {
+      $('.row-button').click(function() {
+        var rowNumber = $(this).data('row');
+        console.log('rowNumber:', rowNumber);
+        var rowElement = document.querySelector('#my-table tbody tr:nth-child(' + (rowNumber-1) + ')');
+        console.log('rowElement:', rowElement);
+        var rowData = [];
+        rowElement.querySelectorAll('td').forEach(function(tdElement) {
+          rowData.push(tdElement.innerText);
+        });
+        console.log('Row ' + rowNumber + ' data:', rowData);
+        // send row data to server using AJAX request
+        $.ajax({
+          type: 'POST',
+          url: '/trade',
+          data: JSON.stringify({
+            seller_id: rowData[0],
+            seller_stock: rowData[1],
+            seller_shares: rowData[2],
+            buyer_stock: rowData[3],
+            buyer_shares: rowData[4]
+          }),
+          contentType: 'application/json',
+          success: function(response) {
+            rowElement.style.display = 'none';
+          },
+          error: function(error) {
+            console.log(error);
+            rowElement.style.display = 'none';
+          }
+        });
+      });
+    });
+</script>
+{% endblock %}

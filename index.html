@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block main %}
+<h1>{{ user }}</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">stock</th>
+            <th scope="col">Price of each share</th>
+            <th scope="col">shares</th>
+        </tr>
+    </thead>
+    <tr>
+    {% for row in rows%}
+    <tr>
+        {%if row.shares != 0%}
+            <td>{{ row.symbol }}</td>
+            <td>{{ row.price | usd }}</td>
+            <td>{{ row.shares }}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+
+</table>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Current Balance</th>
+            <th scope="col">networth</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>{{ balance | usd }}</td>
+        <td>{{networth | usd}}</td>
+    </tr>
+</table>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th colspan="4">Buy</th>
+            </tr>
+            <tr>
+                <th scope="col">shares</th>
+                <th scope="col">symbol</th>
+                <th scope="col">price</th>
+                <th scope="col">date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks_bought%}
+            <tr>
+                <td>{{stock.shares}}</td>
+                <td>{{stock.symbol}}</td>
+                {% if stock.purchase_price == 0.00 %}
+                    <td>trade</td>
+                {% else %}
+                    <td>{{stock.purchase_price | usd}}</td>
+                {% endif %}
+                <td>{{stock.purchase_date}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th colspan="4">Sold</th>
+            </tr>
+            <tr>
+                <th>shares</th>
+                <th>symbol</th>
+                <th>price</th>
+                <th>date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks_sold%}
+            <tr>
+                <td>{{stock.shares}}</td>
+                <td>{{stock.symbol}}</td>
+                {% if stock.purchase_price == 0.00 %}
+                    <td>trade</td>
+                {% else %}
+                    <td>{{stock.purchase_price | usd}}</td>
+                {% endif %}
+                <td>{{stock.purchase_date}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

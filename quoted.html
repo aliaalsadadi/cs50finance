@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}
+    quoted
+{% endblock %}
+{% block main %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Stock</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>{{ symbol }}</td>
+            <td>{{ price }}</td>
+        </tr>
+    </table>
+{% endblock %}
